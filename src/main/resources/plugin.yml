@@ -1,0 +1,20 @@
+name: SimpleBroadcast
+main: com.simplebroadcast.SimpleBroadcast
+version: 1.0.0
+api-version: "1.21"
+description: "Simple Paper/Spigot plugin that sends automatic messages to the server chat."
+author: "Alberto"
+
+commands:
+  simplebroadcast:
+    description: SimpleBroadcast plugin commands
+    usage: /<command> <reload|toggle>
+    aliases: [sb]
+
+permissions:
+  sp.reload:
+    description: Allows reloading the plugin configuration without restarting the server
+    default: op
+  sp.toggle:
+    description: Allows pausing or resuming automatic message broadcasting
+    default: op

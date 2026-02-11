@@ -1,0 +1,26 @@
+# Prefix added at the start of each broadcast message.
+# Minecraft color codes are supported using '&'.
+prefix: "&7[&a!&7]"
+
+# Interval in seconds between each broadcast message.
+interval: 60
+
+# If false, messages are sent in order, restarting from the beginning when the list ends.
+# If true, a random message is chosen, avoiding repeating the last one sent.
+random-send: false
+
+# List of messages to broadcast. Minecraft color codes supported with '&'.
+messages:
+  - "&aThis is the &lfirst &r&a example message."
+  - "&bThis is the &lsecond &r&b example message."
+
+# Messages sent by the plugin for commands (reload, toggle, errors, usage).
+# Use '&' for color codes. <command> is replaced with the command used (/simplebroadcast or /sb).
+plugin-messages:
+  prefix: "&7[&aSimpleBroadcast&7]"
+  reload-success: "&aConfiguration reloaded successfully."
+  reload-no-permission: "&cYou do not have permission to run this command. (sp.reload)"
+  toggle-resumed: "&aMessage broadcasting resumed."
+  toggle-paused: "&eMessage broadcasting paused."
+  toggle-no-permission: "&cYou do not have permission to run this command. (sp.toggle)"
+  usage: "&7Usage: &f/<command> <reload|toggle>"
