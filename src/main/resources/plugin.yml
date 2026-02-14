@@ -3,7 +3,7 @@ main: com.simplebroadcast.SimpleBroadcast
 version: 1.0.0
 api-version: "1.21"
 description: "Simple Paper/Spigot plugin that sends automatic messages to the server chat."
-author: "Alberto"
+author: "sardidefcon"
 
 commands:
   simplebroadcast:
