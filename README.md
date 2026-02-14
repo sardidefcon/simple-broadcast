@@ -1,4 +1,4 @@
-# SimpleBroadcast
+![Logo](https://i.ibb.co/201Mczsg/Simple-Broadcast.png)
 
 Simple Minecraft plugin for Paper/Spigot that sends automatic messages to the server chat.
 
