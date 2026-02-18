@@ -23,8 +23,8 @@ Simple Minecraft plugin for Paper/Spigot that sends automatic messages to the se
 | `/simplebroadcast reload` | `/sb reload` | Reloads the plugin configuration |
 | `/simplebroadcast toggle` | `/sb toggle` | Pauses or resumes automatic message broadcasting |
 
-- **reload**: requires permission **`sp.reload`** (default: op)
-- **toggle**: requires permission **`sp.toggle`** (default: op)
+- **reload**: requires permission **`sb.reload`** (default: op)
+- **toggle**: requires permission **`sb.toggle`** (default: op)
 - Works in-game and from the server console
 
 ## Requirements
@@ -43,7 +43,7 @@ mvn clean package
 
 The plugin JAR will be generated at:
 
-`target/SimpleBroadcast-1.1.0.jar`
+`target/SimpleBroadcast-1.1.1.jar`
 
 ## Installation
 
@@ -74,9 +74,9 @@ plugin-messages:
   prefix: "&7[&6Broadcasts&7]"
   toggle-paused: "&eMessage broadcasting paused"
   toggle-resumed: "&aMessage broadcasting resumed"
-  toggle-no-permission: "&cYou do not have permission to run this command. (sp.toggle)"
+  toggle-no-permission: "&cYou do not have permission to run this command. (sb.toggle)"
   reload-success: "&aConfiguration reloaded successfully"
-  reload-no-permission: "&cYou do not have permission to run this command. (sp.reload)"
+  reload-no-permission: "&cYou do not have permission to run this command. (sb.reload)"
   usage: "&7Usage: &f/<command> <reload|toggle>"
 ```
 

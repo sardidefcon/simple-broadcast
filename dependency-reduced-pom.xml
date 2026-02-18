@@ -4,7 +4,7 @@
   <groupId>com.simpleplugins</groupId>
   <artifactId>SimpleBroadcast</artifactId>
   <name>SimpleBroadcast</name>
-  <version>1.1.0</version>
+  <version>1.1.1</version>
   <description>Simple Paper/Spigot plugin that sends automatic messages to the server chat or action bar.</description>
   <build>
     <plugins>

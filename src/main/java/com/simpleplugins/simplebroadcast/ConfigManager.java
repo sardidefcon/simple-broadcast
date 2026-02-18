@@ -58,10 +58,10 @@ public class ConfigManager {
         String base = PLUGIN_MESSAGES_PATH + ".";
         this.pluginPrefix = translate(config.getString(base + "prefix", "&7[&aSimpleBroadcast&7]"));
         this.reloadSuccess = translate(config.getString(base + "reload-success", "&aConfiguration reloaded successfully."));
-        this.reloadNoPermission = translate(config.getString(base + "reload-no-permission", "&cYou do not have permission to run this command. (sp.reload)"));
+        this.reloadNoPermission = translate(config.getString(base + "reload-no-permission", "&cYou do not have permission to run this command. (sb.reload)"));
         this.toggleResumed = translate(config.getString(base + "toggle-resumed", "&aMessage broadcasting resumed."));
         this.togglePaused = translate(config.getString(base + "toggle-paused", "&eMessage broadcasting paused."));
-        this.toggleNoPermission = translate(config.getString(base + "toggle-no-permission", "&cYou do not have permission to run this command. (sp.toggle)"));
+        this.toggleNoPermission = translate(config.getString(base + "toggle-no-permission", "&cYou do not have permission to run this command. (sb.toggle)"));
         this.usage = translate(config.getString(base + "usage", "&7Usage: &f/<command> <reload|toggle>"));
     }
 

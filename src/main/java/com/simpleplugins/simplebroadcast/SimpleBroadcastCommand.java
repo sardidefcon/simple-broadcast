@@ -11,8 +11,8 @@ import java.util.List;
 
 public class SimpleBroadcastCommand implements CommandExecutor, TabCompleter {
 
-    private static final String PERMISSION_RELOAD = "sp.reload";
-    private static final String PERMISSION_TOGGLE = "sp.toggle";
+    private static final String PERMISSION_RELOAD = "sb.reload";
+    private static final String PERMISSION_TOGGLE = "sb.toggle";
 
     private final SimpleBroadcast plugin;
 

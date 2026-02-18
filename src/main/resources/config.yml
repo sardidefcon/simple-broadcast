@@ -36,9 +36,9 @@ plugin-messages:
 
   toggle-paused: "&eMessage broadcasting paused"
   toggle-resumed: "&aMessage broadcasting resumed"
-  toggle-no-permission: "&cYou do not have permission to run this command. (sp.toggle)"
+  toggle-no-permission: "&cYou do not have permission to run this command. (sb.toggle)"
 
   reload-success: "&aConfiguration reloaded successfully"
-  reload-no-permission: "&cYou do not have permission to run this command. (sp.reload)"
+  reload-no-permission: "&cYou do not have permission to run this command. (sb.reload)"
 
   usage: "&7Usage: &f/<command> <reload|toggle>"
