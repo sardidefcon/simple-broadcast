@@ -5,7 +5,8 @@ Simple Minecraft plugin for Paper/Spigot that sends automatic messages to the se
 ## Features
 
 - All configuration is read from `config.yml`
-- Each message can be shown in **chat** (with prefix) or **action bar** (no prefix)
+- **Chat or action bar:** each message can be shown in **chat** (with prefix) or **action bar** (no prefix)
+- **Optional sound:** each message can play a Minecraft sound when sent (or no sound if omitted or set to `none`)
 - Configurable prefix for chat messages (`prefix`)
 - Configurable interval in seconds (`interval`)
 - Sequential or random sending (`random-send`)
@@ -55,32 +56,36 @@ The plugin JAR will be generated at:
 Example configuration (defaults):
 
 ```yaml
-prefix: "&e[!]"
+check-updates: true
+prefix: "&e[!] &r"
 interval: 60
 random-send: false
+
 messages:
-  - text: "&fThis is the &e&lfirst &r&a example message."
+  - text: "&fThis is the &e&lfirst &fexample message"
     display: chat
-  - text: "&eAction bar &aexample"
+    sound: "entity.experience_orb.pickup"
+  - text: "&e&lAction bar example message"
     display: action-bar
+    sound: none
+  - text: "&fThis is the &e&lthird &fexample message"
 
 plugin-messages:
-  prefix: "&7[&aSimpleBroadcast&7]"
-  reload-success: "&aConfiguration reloaded successfully."
-  reload-no-permission: "&cYou do not have permission to run this command. (sp.reload)"
-  toggle-resumed: "&aMessage broadcasting resumed."
-  toggle-paused: "&eMessage broadcasting paused."
+  prefix: "&7[&6Broadcasts&7]"
+  toggle-paused: "&eMessage broadcasting paused"
+  toggle-resumed: "&aMessage broadcasting resumed"
   toggle-no-permission: "&cYou do not have permission to run this command. (sp.toggle)"
+  reload-success: "&aConfiguration reloaded successfully"
+  reload-no-permission: "&cYou do not have permission to run this command. (sp.reload)"
   usage: "&7Usage: &f/<command> <reload|toggle>"
 ```
 
+- **check-updates**: If `true`, checks Modrinth for updates on startup and notifies console and operators
 - **prefix**: Prefix added at the start of each **chat** message (ignored for action bar)
 - **interval**: Interval in seconds between each message
-- **random-send**:
-  - `false`: Messages are sent in order; when the list ends, it starts again from the beginning
-  - `true`: A random message is chosen, avoiding repeating the last one
-- **messages**: List of messages. Each has `text` (supports `&` colors) and `display`: `chat` or `action-bar`. Action bar messages do not show the prefix.
-- **plugin-messages**: Messages shown by the plugin for commands. Use `&` for color codes. `<command>` in `usage` is replaced with the command used (`/simplebroadcast` or `/sb`)
+- **random-send**: `false` = sequential; `true` = random, avoiding repeating the last message
+- **messages**: List of messages. Each has **`text`** (required, supports `&` colors). Optional: **`display`** (`chat` or `action-bar`, default `chat`); **`sound`** (Minecraft sound key, or `none` / omit for no sound). Action bar messages do not show the prefix.
+- **plugin-messages**: Messages shown for commands. `<command>` in `usage` is replaced with the command used (`/simplebroadcast` or `/sb`)
 
 ## Internal behaviour
 
@@ -93,3 +98,4 @@ plugin-messages:
   - Applies `&` color codes via `ChatColor.translateAlternateColorCodes`
   - If display is **chat**: broadcasts to the whole server with the configured prefix
   - If display is **action-bar**: sends to each online player's action bar (no prefix)
+  - If the message has a **sound** set (and not `none`), plays that sound for all online players
