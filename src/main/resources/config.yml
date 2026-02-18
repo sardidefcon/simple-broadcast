@@ -3,6 +3,9 @@
 # Developed by sardidefcon
 ##############################
 
+# If true, checks Modrinth for new plugin versions on startup
+check-updates: true
+
 # Prefix added at the start of each broadcast message
 # Empty string = no prefix
 prefix: "&e[!] &r"
@@ -15,9 +18,16 @@ interval: 60
 random-send: false
 
 # List of messages to broadcast. Minecraft color codes supported with '&'.
+# Each message has 'text'. Optional: 'display' ('chat' = default, or 'action-bar'), 'sound' (Minecraft sound key, or 'none').
+# If 'display' is omitted, the message is shown in chat. If 'sound' is omitted or 'none', no sound is played.
 messages:
-  - "&fThis is the &e&lfirst &fexample message"
-  - "&fThis is the &e&lsecond &fexample message"
+  - text: "&fThis is the &e&lfirst &fexample message"
+    display: chat
+    sound: "entity.experience_orb.pickup"
+  - text: "&e&lAction bar example message"
+    display: action-bar
+    sound: none
+  - text: "&fThis is the &e&lthird &fexample message"
 
 # Messages sent by the plugin for commands (reload, toggle, errors, usage).
 # Use '&' for color codes. <command> is replaced with the command used (/simplebroadcast or /sb).

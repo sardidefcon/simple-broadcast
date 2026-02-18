@@ -1,14 +1,15 @@
 ![Logo](https://i.ibb.co/201Mczsg/Simple-Broadcast.png)
 
-Simple Minecraft plugin for Paper/Spigot that sends automatic messages to the server chat
+Simple Minecraft plugin for Paper/Spigot that sends automatic messages to the server chat or action bar
 
 ## Features
 
 - All configuration is read from `config.yml`
-- Configurable prefix for broadcast messages (`prefix`)
+- Each message can be shown in **chat** (with prefix) or **action bar** (no prefix)
+- Configurable prefix for chat messages (`prefix`)
 - Configurable interval in seconds (`interval`)
 - Sequential or random sending (`random-send`)
-- Minecraft color codes supported using `&`
+- Minecraft color codes supported using `&` (chat and action bar)
 - Safe handling when the message list is empty
 - **reload** command to reload configuration without restarting the server
 - **toggle** command to pause or resume message broadcasting
@@ -29,19 +30,19 @@ Simple Minecraft plugin for Paper/Spigot that sends automatic messages to the se
 
 - Java 21 (LTS).
 - Paper or Spigot server on the latest supported version (tested with `api-version: "1.21"`)
-- Gradle installed on your system (this project only includes `build.gradle`, not the wrapper)
+- Maven 3.6+ to build the project
 
 ## Build
 
-From the project root (`simplebroadcast`), run:
+From the project root (`simple-broadcast`), run:
 
 ```bash
-gradle build
+mvn clean package
 ```
 
 The plugin JAR will be generated at:
 
-`build/libs/SimpleBroadcast-1.0.0.jar`
+`target/SimpleBroadcast-1.1.0.jar`
 
 ## Installation
 
@@ -58,8 +59,10 @@ prefix: "&e[!]"
 interval: 60
 random-send: false
 messages:
-  - "&fThis is the &e&lfirst &r&a example message."
-  - "&fThis is the &e&lsecond &r&b example message."
+  - text: "&fThis is the &e&lfirst &r&a example message."
+    display: chat
+  - text: "&eAction bar &aexample"
+    display: action-bar
 
 plugin-messages:
   prefix: "&7[&aSimpleBroadcast&7]"
@@ -71,12 +74,12 @@ plugin-messages:
   usage: "&7Usage: &f/<command> <reload|toggle>"
 ```
 
-- **prefix**: Prefix added at the start of each broadcast message
+- **prefix**: Prefix added at the start of each **chat** message (ignored for action bar)
 - **interval**: Interval in seconds between each message
 - **random-send**:
   - `false`: Messages are sent in order; when the list ends, it starts again from the beginning
   - `true`: A random message is chosen, avoiding repeating the last one
-- **messages**: List of messages to broadcast
+- **messages**: List of messages. Each has `text` (supports `&` colors) and `display`: `chat` or `action-bar`. Action bar messages do not show the prefix.
 - **plugin-messages**: Messages shown by the plugin for commands. Use `&` for color codes. `<command>` in `usage` is replaced with the command used (`/simplebroadcast` or `/sb`)
 
 ## Internal behaviour
@@ -88,4 +91,5 @@ plugin-messages:
   - Reads the message list from the configuration
   - If it is empty, it does nothing and returns silently
   - Applies `&` color codes via `ChatColor.translateAlternateColorCodes`
-  - Broadcasts the message to the whole server with the configured prefix
+  - If display is **chat**: broadcasts to the whole server with the configured prefix
+  - If display is **action-bar**: sends to each online player's action bar (no prefix)

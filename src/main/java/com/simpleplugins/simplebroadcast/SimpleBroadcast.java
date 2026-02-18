@@ -1,5 +1,6 @@
-package com.simplebroadcast;
+package com.simpleplugins.simplebroadcast;
 
+import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -13,12 +14,18 @@ public class SimpleBroadcast extends JavaPlugin {
         // Ensure config.yml exists in the plugin's data folder.
         saveDefaultConfig();
 
+        // bStats (do not modify this block - see https://bstats.org)
+        int pluginId = 29532;
+        Metrics metrics = new Metrics(this, pluginId);
+
         this.configManager = new ConfigManager(this);
         startBroadcastTask();
 
         SimpleBroadcastCommand cmd = new SimpleBroadcastCommand(this);
         getCommand("simplebroadcast").setExecutor(cmd);
         getCommand("simplebroadcast").setTabCompleter(cmd);
+
+        UpdateChecker.check(this, getDescription().getVersion(), configManager.isCheckUpdates());
 
         getLogger().info("SimpleBroadcast has been enabled.");
     }
@@ -92,4 +99,3 @@ public class SimpleBroadcast extends JavaPlugin {
         return configManager;
     }
 }
-

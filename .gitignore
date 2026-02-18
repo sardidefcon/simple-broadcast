@@ -1,0 +1,61 @@
+# Gradle (legacy)
+.gradle/
+build/
+
+# Maven
+target/
+
+# Archivos compilados
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# IDE - IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# IDE - Eclipse
+.project
+.classpath
+.settings/
+bin/
+
+# IDE - NetBeans
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+# IDE - VS Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# Logs y temporales
+*.log
+*.tmp
+*.temp
+*.swp
+*~
+.cache/
+
+# Variables de entorno (si se añaden en el futuro)
+.env
+.env.local
+.env.*.local

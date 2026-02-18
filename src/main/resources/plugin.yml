@@ -1,6 +1,6 @@
 name: SimpleBroadcast
-main: com.simplebroadcast.SimpleBroadcast
-version: 1.0.0
+main: com.simpleplugins.simplebroadcast.SimpleBroadcast
+version: 1.1.0
 api-version: "1.21"
 description: "Simple Paper/Spigot plugin that sends automatic messages to the server chat."
 author: "sardidefcon"

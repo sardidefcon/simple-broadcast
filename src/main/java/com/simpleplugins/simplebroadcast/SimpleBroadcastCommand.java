@@ -1,4 +1,4 @@
-package com.simplebroadcast;
+package com.simpleplugins.simplebroadcast;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

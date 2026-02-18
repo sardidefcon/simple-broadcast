@@ -1,11 +1,13 @@
-package com.simplebroadcast;
+package com.simpleplugins.simplebroadcast;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class ConfigManager {
 
@@ -13,10 +15,11 @@ public class ConfigManager {
 
     private final JavaPlugin plugin;
 
+    private boolean checkUpdates;
     private String prefix;
     private long intervalSeconds;
     private boolean randomSend;
-    private List<String> messages;
+    private List<BroadcastMessage> messages;
 
     private String pluginPrefix;
     private String reloadSuccess;
@@ -34,6 +37,8 @@ public class ConfigManager {
     public void reload() {
         FileConfiguration config = plugin.getConfig();
 
+        this.checkUpdates = config.getBoolean("check-updates", true);
+
         String rawPrefix = config.getString("prefix", "[!]");
         this.prefix = ChatColor.translateAlternateColorCodes('&', rawPrefix);
 
@@ -44,12 +49,7 @@ public class ConfigManager {
 
         this.randomSend = config.getBoolean("random-send", false);
 
-        List<String> list = config.getStringList("messages");
-        if (list == null || list.isEmpty()) {
-            this.messages = Collections.emptyList();
-        } else {
-            this.messages = Collections.unmodifiableList(list);
-        }
+        this.messages = loadMessages(config.getList("messages"));
 
         loadPluginMessages(config);
     }
@@ -69,6 +69,37 @@ public class ConfigManager {
         return raw == null ? "" : ChatColor.translateAlternateColorCodes('&', raw);
     }
 
+    @SuppressWarnings("unchecked")
+    private static List<BroadcastMessage> loadMessages(List<?> list) {
+        if (list == null || list.isEmpty()) {
+            return Collections.emptyList();
+        }
+        List<BroadcastMessage> out = new ArrayList<>(list.size());
+        for (Object item : list) {
+            if (item instanceof String) {
+                out.add(new BroadcastMessage((String) item, BroadcastMessage.Display.CHAT, null));
+            } else if (item instanceof Map) {
+                Map<?, ?> map = (Map<?, ?>) item;
+                String text = map.get("text") != null ? map.get("text").toString() : "";
+                Object displayObj = map.get("display");
+                BroadcastMessage.Display display = BroadcastMessage.Display.CHAT;
+                if (displayObj != null && "action-bar".equalsIgnoreCase(displayObj.toString())) {
+                    display = BroadcastMessage.Display.ACTION_BAR;
+                }
+                Object soundObj = map.get("sound");
+                String sound = (soundObj == null || soundObj.toString().isBlank())
+                        ? null
+                        : soundObj.toString();
+                out.add(new BroadcastMessage(text, display, sound));
+            }
+        }
+        return Collections.unmodifiableList(out);
+    }
+
+    public boolean isCheckUpdates() {
+        return checkUpdates;
+    }
+
     public String getPrefix() {
         return prefix;
     }
@@ -81,7 +112,7 @@ public class ConfigManager {
         return randomSend;
     }
 
-    public List<String> getMessages() {
+    public List<BroadcastMessage> getMessages() {
         return messages;
     }
 
