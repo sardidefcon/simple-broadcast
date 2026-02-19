@@ -1,45 +1,45 @@
-# Gradle (legacy)
+target/
+dependency-reduced-pom.xml
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+*.pom.orig
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
 .gradle/
 build/
+nbbuild/
+dist/
+nbdist/
+nbproject/
+nbproject/private/
+.nb-gradle/
 
-# Maven
-target/
-
-# Archivos compilados
 *.class
 *.jar
 *.war
 *.ear
 *.nar
+hs_err_*.log
+hs_err_pid*
+*.hprof
+!**/src/main/resources/**/*.jar
+!**/src/test/resources/**/*.jar
 
-# macOS
-.DS_Store
-.AppleDouble
-.LSOverride
-._*
-
-# IDE - IntelliJ IDEA
 .idea/
 *.iml
 *.ipr
 *.iws
 out/
-
-# IDE - Eclipse
 .project
 .classpath
 .settings/
 bin/
 
-# IDE - NetBeans
-nbproject/private/
-build/
-nbbuild/
-dist/
-nbdist/
-.nb-gradle/
-
-# IDE - VS Code
 .vscode/
 !.vscode/settings.json
 !.vscode/tasks.json
@@ -47,15 +47,27 @@ nbdist/
 !.vscode/extensions.json
 *.code-workspace
 
-# Logs y temporales
+.DS_Store
+.DS_Store?
+.AppleDouble
+.LSOverride
+._*
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
 *.log
+logs/
 *.tmp
 *.temp
+*.orig
+*.bak
 *.swp
+*.swo
 *~
 .cache/
 
-# Variables de entorno (si se añaden en el futuro)
 .env
 .env.local
 .env.*.local
+*.local
