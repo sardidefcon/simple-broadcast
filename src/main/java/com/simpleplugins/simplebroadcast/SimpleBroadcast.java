@@ -4,6 +4,8 @@ import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.logging.Level;
+
 public class SimpleBroadcast extends JavaPlugin {
 
     private ConfigManager configManager;
@@ -12,6 +14,7 @@ public class SimpleBroadcast extends JavaPlugin {
     @Override
     public void onEnable() {
         saveDefaultConfig();
+        ConfigUpdater.mergeWithDefaults(this);
 
         int pluginId = 29532;
         Metrics metrics = new Metrics(this, pluginId);
@@ -69,10 +72,24 @@ public class SimpleBroadcast extends JavaPlugin {
         }
     }
 
-    public void reloadPluginConfig() {
-        reloadConfig();
-        configManager.reload();
-        startBroadcastTask();
+    /**
+     * Merges defaults with existing config (adding only missing keys), reloads
+     * from disk, and restarts the broadcast task. Existing user values are
+     * never overwritten. On failure, config and task state are left unchanged.
+     *
+     * @return true if reload succeeded, false on error
+     */
+    public boolean reloadPluginConfig() {
+        try {
+            ConfigUpdater.mergeWithDefaults(this);
+            reloadConfig();
+            configManager.reload();
+            startBroadcastTask();
+            return true;
+        } catch (Exception e) {
+            getLogger().log(Level.SEVERE, "Failed to reload configuration", e);
+            return false;
+        }
     }
 
     public ConfigManager getConfigManager() {

@@ -40,9 +40,12 @@ public class SimpleBroadcastCommand implements CommandExecutor, TabCompleter {
                 sender.sendMessage(withPrefix(plugin.getConfigManager().getReloadNoPermission()));
                 return true;
             }
-            plugin.reloadPluginConfig();
-            sender.sendMessage(withPrefix(plugin.getConfigManager().getReloadSuccess()));
-            plugin.getLogger().info("Configuration reloaded by " + sender.getName() + ".");
+            if (plugin.reloadPluginConfig()) {
+                sender.sendMessage(withPrefix(plugin.getConfigManager().getReloadSuccess()));
+                plugin.getLogger().info("Configuration reloaded by " + sender.getName() + ".");
+            } else {
+                sender.sendMessage(withPrefix("&cFailed to reload configuration. Check the server log."));
+            }
             return true;
         }
 
