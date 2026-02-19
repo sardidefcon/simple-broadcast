@@ -16,9 +16,6 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.regex.Pattern;
 
-/**
- * Checks Modrinth for new plugin versions and notifies console and operators.
- */
 public class UpdateChecker {
 
     private static final String MODRINTH_PROJECT = "simple-broadcast";
@@ -27,14 +24,6 @@ public class UpdateChecker {
 
     private static final Pattern VERSION_NUMBER_PATTERN = Pattern.compile("\"version_number\"\\s*:\\s*\"([^\"]+)\"");
 
-    /**
-     * Schedules an async check for updates. If a newer version is found, a yellow message
-     * is sent to the console and to all online operators (with clickable link).
-     *
-     * @param plugin        the plugin instance
-     * @param currentVersion current version string (e.g. from plugin.yml)
-     * @param enabled       whether update checking is enabled in config
-     */
     public static void check(JavaPlugin plugin, String currentVersion, boolean enabled) {
         if (!enabled || currentVersion == null || currentVersion.isEmpty()) {
             return;
@@ -81,9 +70,6 @@ public class UpdateChecker {
         }
     }
 
-    /**
-     * Compares two version strings (e.g. "1.0.0" vs "1.1.0"). Returns true if latest is newer than current.
-     */
     private static boolean isNewerVersion(String latest, String current) {
         int[] latestParts = parseVersion(latest);
         int[] currentParts = parseVersion(current);
@@ -124,13 +110,11 @@ public class UpdateChecker {
                         .decorate(TextDecoration.UNDERLINED)
                         .clickEvent(ClickEvent.openUrl(MODRINTH_PAGE_URL)));
 
-        // Console
         CommandSender console = Bukkit.getConsoleSender();
         console.sendMessage(line1);
         console.sendMessage(line2);
         plugin.getLogger().info("A new version of Simple Broadcast is available: " + latestVersion + " - " + MODRINTH_PAGE_URL);
 
-        // Operators online
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (player.isOp()) {
                 player.sendMessage(line1);

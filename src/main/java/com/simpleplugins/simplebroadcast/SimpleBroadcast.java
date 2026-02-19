@@ -11,10 +11,8 @@ public class SimpleBroadcast extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        // Ensure config.yml exists in the plugin's data folder.
         saveDefaultConfig();
 
-        // bStats (do not modify this block - see https://bstats.org)
         int pluginId = 29532;
         Metrics metrics = new Metrics(this, pluginId);
 
@@ -36,27 +34,20 @@ public class SimpleBroadcast extends JavaPlugin {
         getLogger().info("SimpleBroadcast has been disabled.");
     }
 
-    /**
-     * Starts (or restarts) the broadcast task based on the current configuration.
-     */
     private void startBroadcastTask() {
         stopBroadcastTask();
 
-        long intervalSeconds = configManager.getIntervalSeconds();
-        if (intervalSeconds <= 0L) {
+        long defaultInterval = configManager.getIntervalSeconds();
+        if (defaultInterval <= 0L) {
             getLogger().warning("Broadcast interval is <= 0. Task will not be started.");
             return;
         }
 
-        long periodTicks = intervalSeconds * 20L;
-
+        final long checkPeriodTicks = 20L;
         BroadcastTask task = new BroadcastTask(configManager);
-        this.broadcastTask = task.runTaskTimer(this, periodTicks, periodTicks);
+        this.broadcastTask = task.runTaskTimer(this, checkPeriodTicks, checkPeriodTicks);
     }
 
-    /**
-     * Stops the broadcast task if it is currently running.
-     */
     private void stopBroadcastTask() {
         if (broadcastTask != null) {
             broadcastTask.cancel();
@@ -64,17 +55,10 @@ public class SimpleBroadcast extends JavaPlugin {
         }
     }
 
-    /**
-     * Returns whether the broadcast task is currently running.
-     */
     public boolean isBroadcastRunning() {
         return broadcastTask != null;
     }
 
-    /**
-     * Toggles broadcast sending: stops if running, starts if stopped.
-     * @return true if broadcasts are now running, false if now paused
-     */
     public boolean toggleBroadcasts() {
         if (isBroadcastRunning()) {
             stopBroadcastTask();
@@ -85,10 +69,6 @@ public class SimpleBroadcast extends JavaPlugin {
         }
     }
 
-    /**
-     * Utility method in case the plugin is reloaded programmatically.
-     * Not wired to any command, but safe to call from external code or plugins.
-     */
     public void reloadPluginConfig() {
         reloadConfig();
         configManager.reload();

@@ -10,16 +10,30 @@ check-updates: true
 # Empty string = no prefix
 prefix: "&e[!] &r"
 
-# Interval in seconds between each broadcast message.
+# Interval in seconds between each broadcast message
 interval: 60
 
-# If false, messages are sent in order, restarting from the beginning when the list ends.
-# If true, a random message is chosen, avoiding repeating the last one sent.
+# If true, no broadcast is sent when the server is empty
+skip-if-empty: true
+
+# Dynamic interval based on online player count
+custom-interval:
+  enabled: false
+  rules:
+    - min-players: 10
+      interval: 3600
+    - min-players: 11
+      interval: 1800
+    - min-players: 16
+      interval: 60
+
+# If false, messages are sent in order, restarting from the beginning when the list ends
+# If true, a random message is chosen, avoiding repeating the last one sent
 random-send: false
 
-# List of messages to broadcast. Minecraft color codes supported with '&'.
-# Each message has 'text'. Optional: 'display' ('chat' = default, or 'action-bar'), 'sound' (Minecraft sound key, or 'none').
-# If 'display' is omitted, the message is shown in chat. If 'sound' is omitted or 'none', no sound is played.
+# List of messages to broadcast. Minecraft color codes supported with '&'
+# Each message has 'text'. Optional: 'display' ('chat' = default, or 'action-bar'), 'sound' (Minecraft sound key, or 'none')
+# If 'display' is omitted, the message is shown in chat. If 'sound' is omitted or 'none', no sound is played
 messages:
   - text: "&fThis is the &e&lfirst &fexample message"
     display: chat
@@ -29,8 +43,7 @@ messages:
     sound: none
   - text: "&fThis is the &e&lthird &fexample message"
 
-# Messages sent by the plugin for commands (reload, toggle, errors, usage).
-# Use '&' for color codes. <command> is replaced with the command used (/simplebroadcast or /sb).
+# Messages sent by the plugin for commands (reload, toggle, errors, usage)
 plugin-messages:
   prefix: "&7[&6Broadcasts&7]"
 

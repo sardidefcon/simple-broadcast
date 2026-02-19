@@ -6,6 +6,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,9 @@ public class ConfigManager {
     private boolean checkUpdates;
     private String prefix;
     private long intervalSeconds;
+    private boolean skipIfEmpty;
+    private boolean customIntervalEnabled;
+    private List<CustomIntervalRule> customIntervalRules;
     private boolean randomSend;
     private List<BroadcastMessage> messages;
 
@@ -46,6 +50,12 @@ public class ConfigManager {
         if (this.intervalSeconds < 1L) {
             this.intervalSeconds = 60L;
         }
+
+        this.skipIfEmpty = config.getBoolean("skip-if-empty", true);
+
+        this.customIntervalEnabled = config.getBoolean("custom-interval.enabled", false);
+        List<?> rawRules = config.getList("custom-interval.rules");
+        this.customIntervalRules = loadAndSortCustomIntervalRules(rawRules);
 
         this.randomSend = config.getBoolean("random-send", false);
 
@@ -96,6 +106,87 @@ public class ConfigManager {
         return Collections.unmodifiableList(out);
     }
 
+    @SuppressWarnings("unchecked")
+    private static List<CustomIntervalRule> loadAndSortCustomIntervalRules(List<?> list) {
+        if (list == null || list.isEmpty()) {
+            return Collections.emptyList();
+        }
+        List<CustomIntervalRule> out = new ArrayList<>(list.size());
+        for (Object item : list) {
+            if (!(item instanceof Map)) {
+                continue;
+            }
+            Map<?, ?> map = (Map<?, ?>) item;
+            Object minObj = map.get("min-players");
+            Object intervalObj = map.get("interval");
+            if (minObj == null || intervalObj == null) {
+                continue;
+            }
+            int minPlayers = toInt(minObj, -1);
+            long interval = toLong(intervalObj, 0L);
+            if (minPlayers < 0 || interval < 1L) {
+                continue;
+            }
+            out.add(new CustomIntervalRule(minPlayers, interval));
+        }
+        out.sort(Comparator.comparingInt(CustomIntervalRule::getMinPlayers));
+        return Collections.unmodifiableList(out);
+    }
+
+    private static int toInt(Object o, int def) {
+        if (o instanceof Number) {
+            return ((Number) o).intValue();
+        }
+        if (o != null) {
+            try {
+                return Integer.parseInt(o.toString());
+            } catch (NumberFormatException ignored) {
+            }
+        }
+        return def;
+    }
+
+    private static long toLong(Object o, long def) {
+        if (o instanceof Number) {
+            return ((Number) o).longValue();
+        }
+        if (o != null) {
+            try {
+                return Long.parseLong(o.toString());
+            } catch (NumberFormatException ignored) {
+            }
+        }
+        return def;
+    }
+
+    public long getEffectiveIntervalSeconds(int onlinePlayerCount) {
+        if (!customIntervalEnabled || customIntervalRules.isEmpty()) {
+            return intervalSeconds;
+        }
+        CustomIntervalRule best = null;
+        for (CustomIntervalRule rule : customIntervalRules) {
+            if (rule.getMinPlayers() <= onlinePlayerCount) {
+                best = rule;
+            }
+        }
+        return best != null ? best.getIntervalSeconds() : intervalSeconds;
+    }
+
+    public boolean shouldSkipWhenEmpty(int onlinePlayerCount) {
+        if (onlinePlayerCount > 0) {
+            return false;
+        }
+        if (customIntervalEnabled) {
+            boolean hasZeroRule = customIntervalRules.stream()
+                    .anyMatch(r -> r.getMinPlayers() == 0);
+            if (hasZeroRule) {
+                return false;
+            }
+            return true;
+        }
+        return skipIfEmpty;
+    }
+
     public boolean isCheckUpdates() {
         return checkUpdates;
     }
@@ -140,7 +231,6 @@ public class ConfigManager {
         return toggleNoPermission;
     }
 
-    /** Returns the usage message; replace &lt;command&gt; with the actual command label. */
     public String getUsage(String commandLabel) {
         return usage.replace("<command>", commandLabel);
     }

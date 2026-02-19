@@ -1,8 +1,5 @@
 package com.simpleplugins.simplebroadcast;
 
-/**
- * Represents a single broadcast message with its display mode (chat or action bar) and optional sound.
- */
 public class BroadcastMessage {
 
     public enum Display {
@@ -12,7 +9,6 @@ public class BroadcastMessage {
 
     private final String text;
     private final Display display;
-    /** Minecraft sound key (e.g. "entity.experience_orb.pickup"), or null if no sound. */
     private final String sound;
 
     public BroadcastMessage(String text, Display display) {
@@ -36,7 +32,6 @@ public class BroadcastMessage {
         return display;
     }
 
-    /** Returns the Minecraft sound key to play, or null if no sound. */
     public String getSound() {
         return sound;
     }

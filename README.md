@@ -9,6 +9,8 @@ Simple Minecraft plugin for Paper/Spigot that sends automatic messages to the se
 - **Optional sound:** each message can play a Minecraft sound when sent (or no sound if omitted or set to `none`)
 - Configurable prefix for chat messages (`prefix`)
 - Configurable interval in seconds (`interval`)
+- **skip-if-empty:** optionally avoid sending broadcasts when there are 0 players online (`skip-if-empty`)
+- **Dynamic interval (custom-interval):** broadcast interval can change based on online player count (threshold scaling)
 - Sequential or random sending (`random-send`)
 - Minecraft color codes supported using `&` (chat and action bar)
 - Safe handling when the message list is empty
@@ -43,7 +45,7 @@ mvn clean package
 
 The plugin JAR will be generated at:
 
-`target/SimpleBroadcast-1.1.1.jar`
+`target/SimpleBroadcast-1.1.2.jar`
 
 ## Installation
 
@@ -59,6 +61,18 @@ Example configuration (defaults):
 check-updates: true
 prefix: "&e[!] &r"
 interval: 60
+skip-if-empty: true
+
+custom-interval:
+  enabled: false
+  rules:
+    - min-players: 10
+      interval: 3600
+    - min-players: 11
+      interval: 1800
+    - min-players: 16
+      interval: 60
+
 random-send: false
 
 messages:
@@ -82,7 +96,9 @@ plugin-messages:
 
 - **check-updates**: If `true`, checks Modrinth for updates on startup and notifies console and operators
 - **prefix**: Prefix added at the start of each **chat** message (ignored for action bar)
-- **interval**: Interval in seconds between each message
+- **interval**: Default interval in seconds between each message
+- **skip-if-empty**: If `true`, no broadcast is sent when there are 0 players online. When **custom-interval** is enabled, skip-if-empty is enforced unless you add a rule with `min-players: 0`.
+- **custom-interval**: Dynamic interval based on online player count (threshold scaling). When `enabled: true`, rules are sorted by `min-players` ascending; the plugin uses the rule with the **highest** `min-players` that is ≤ current player count. If no rule matches, the default **interval** is used. You can define any number of rules. Example: with 12 players online and rules 10→3600, 11→1800, 16→60, the interval used is 1800 (11 matches; 16 does not). If you add a rule with `min-players: 0`, broadcasts can run with 0 players using that rule’s interval (skip-if-empty is not enforced).
 - **random-send**: `false` = sequential; `true` = random, avoiding repeating the last message
 - **messages**: List of messages. Each has **`text`** (required, supports `&` colors). Optional: **`display`** (`chat` or `action-bar`, default `chat`); **`sound`** (Minecraft sound key, or `none` / omit for no sound). Action bar messages do not show the prefix.
 - **plugin-messages**: Messages shown for commands. `<command>` in `usage` is replaced with the command used (`/simplebroadcast` or `/sb`)

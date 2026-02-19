@@ -19,6 +19,7 @@ public class BroadcastTask extends BukkitRunnable {
 
     private int currentIndex = 0;
     private String lastMessageRaw = null;
+    private long lastBroadcastTimeMillis = 0L;
 
     public BroadcastTask(ConfigManager configManager) {
         this.configManager = configManager;
@@ -26,6 +27,20 @@ public class BroadcastTask extends BukkitRunnable {
 
     @Override
     public void run() {
+        int onlineCount = Bukkit.getOnlinePlayers().size();
+
+        if (onlineCount == 0 && configManager.shouldSkipWhenEmpty(0)) {
+            return;
+        }
+
+        long effectiveIntervalSeconds = configManager.getEffectiveIntervalSeconds(onlineCount);
+        long effectiveIntervalMillis = effectiveIntervalSeconds * 1000L;
+        long now = System.currentTimeMillis();
+        if (lastBroadcastTimeMillis > 0 && (now - lastBroadcastTimeMillis) < effectiveIntervalMillis) {
+            return;
+        }
+        lastBroadcastTimeMillis = now;
+
         List<BroadcastMessage> messages = configManager.getMessages();
 
         if (messages == null || messages.isEmpty()) {
